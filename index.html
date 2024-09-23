@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>デジタル時計</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@900&family=Courier+New&display=swap');
+        /* 2つのフォントをインポート */
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #282c34;
+            /* デフォルト背景色 */
+            transition: background-color 0.5s ease, background-image 0.5s ease, font-family 0.5s ease;
+            /* 背景色、画像、フォントの変更にアニメーション */
+            background-size: cover;
+            /* 画像を画面全体に拡大 */
+            background-position: center;
+        }
+
+        .clock {
+            color: white;
+            font-size: 5rem;
+            letter-spacing: 0.1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="clock" id="clock"></div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const timeString = `${hours}:${minutes}:${seconds}`;
+            const combinedTime = parseInt(hours + minutes + seconds);
+
+            document.getElementById('clock').textContent = timeString;
+
+            // 条件A: 3の倍数または3が付く数字
+            const conditionA = combinedTime % 3 === 0 || /3/.test(combinedTime);
+            // 条件B: 5の倍数
+            const conditionB = combinedTime % 5 === 0;
+
+            // 背景画像とフォントの変更ロジック
+            if (conditionA && conditionB) {
+                document.body.style.backgroundColor = 'transparent'; // 背景色は透明にする
+                document.body.style.backgroundImage = 'url("./images/aho-dog.png")'; // A and B -> 黄色系の画像
+                document.body.style.fontFamily = "'Courier New', monospace"; // フォント -> Courier New
+            } else if (conditionA) {
+                document.body.style.backgroundColor = '#EAEAEA'; // 背景色は白
+                document.body.style.backgroundImage = 'url("./images/aho.png")'; // Aのみ -> 赤系の画像
+                document.body.style.fontFamily = "'Roboto', sans-serif"; // フォント -> Roboto
+            } else if (conditionB) {
+                document.body.style.backgroundColor = 'transparent'; // 背景色は透明にする
+                document.body.style.backgroundImage = 'url("./images/dog.png")'; // Bのみ -> 青系の画像
+                document.body.style.fontFamily = "'Courier New', monospace"; // フォント -> Courier New
+            } else {
+                document.body.style.backgroundColor = '#282c34'; // その他 -> デフォルト色
+                document.body.style.backgroundImage = 'none'; // 背景画像なし
+                document.body.style.fontFamily = "'Courier New', monospace"; // フォント -> デフォルト
+            }
+        }
+
+        setInterval(updateClock, 1000);  // 1秒ごとにupdateClockを呼び出す
+        updateClock();  // 初回の時刻をすぐに表示
+    </script>
+</body>
+
+</html>
